@@ -20,4 +20,12 @@ app.post('/tweets', (req, res) => {
     res.send('OK');
 });
 
+app.get('/tweets', (req, res) => {
+    if(tweets.length < 10){
+        res.send([...tweets].reverse());
+    } else {
+        res.send([...tweets].reverse().slice(0, 10));
+    }
+});
+
 app.listen(5000);
