@@ -9,14 +9,18 @@ const users = [];
 const tweets = [];
 
 app.post('/sign-up', (req, res) => {
-    let user = req.body;
-    users.push(user);
+    users.push(req.body);
     res.send('OK');
 });
 
 app.post('/tweets', (req, res) => {
-    let tweet = req.body;
-    tweets.push(tweet);
+    const { username, tweet } = req.body;
+    const { avatar } = users.find(user => user.username === username);
+    tweets.push({
+        username: username,
+        avatar: avatar,
+        tweet: tweet
+    });
     res.send('OK');
 });
 
