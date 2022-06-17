@@ -11,7 +11,13 @@ const tweets = [];
 app.post('/sign-up', (req, res) => {
     let user = req.body;
     users.push(user);
-    res.send(users);
+    res.send('OK');
+});
+
+app.post('/tweets', (req, res) => {
+    let tweet = req.body;
+    tweets.push(tweet);
+    res.send('OK');
 });
 
 app.listen(5000);
