@@ -19,11 +19,12 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-    const { username, tweet } = req.body;
-    const { avatar } = users.find(user => user.username === username);
-    if (!isEmpty(username) && !isEmpty(tweet) && isValidUrl(avatar)) {
+    const user = req.headers.user;
+    const { tweet } = req.body;
+    const { avatar } = users.find(u => u.username === user);
+    if (!isEmpty(user) && !isEmpty(tweet) && isValidUrl(avatar)) {
         tweets.push({
-            username: username,
+            username: user,
             avatar: avatar,
             tweet: tweet
         });
@@ -34,17 +35,26 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-    if (tweets.length < 10) {
-        res.send([...tweets].reverse());
+    if (isEmpty(req.body)) {
+        res.sendStatus(400);
     } else {
-        res.send([...tweets].reverse().slice(0, 10));
+        const page = req.query.page;
+        if (tweets.length < 10) {
+            res.send([...tweets].reverse());
+        } else {
+            res.send([...tweets].reverse().slice(0, 10));
+        }
     }
 });
 
 app.get('/tweets/:username', (req, res) => {
     const user = req.params.username;
-    const userTweets = tweets.filter(u => u.username === user);
-    res.send(userTweets);
+    if (isEmpty(user)) {
+        res.sendStatus(400);
+    } else {
+        const userTweets = tweets.filter(u => u.username === user);
+        res.send(userTweets);
+    }
 });
 
 function isEmpty(obj) {
