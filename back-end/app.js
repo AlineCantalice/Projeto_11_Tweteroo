@@ -41,6 +41,12 @@ app.get('/tweets', (req, res) => {
     }
 });
 
+app.get('/tweets/:username', (req, res) => {
+    const user = req.params.username;
+    const userTweets = tweets.filter(u => u.username === user);
+    res.send(userTweets);
+});
+
 function isEmpty(obj) {
     const objValues = Object.values(obj);
     if (obj === '') {
